@@ -46,7 +46,25 @@ export class SpeechService {
       );
   }
 
-  private buildQuery(query: PaginationQueryConfig, ref: firebase.firestore.CollectionReference) {
+  getSpeech(id: string): Observable<any> {
+    return this.afs
+      .doc<SpeechAPIResult>(`speeches/${id}`)
+      .snapshotChanges()
+      .pipe(
+        map(action => {
+          const data = action.payload.data();
+          const doc = action.payload;
+          const id = action.payload.id;
+          return { ...data, doc, id };
+        }),
+        tap(speech => console.log({ speech }))
+      );
+  }
+
+  private buildQuery(
+    query: PaginationQueryConfig,
+    ref: firebase.firestore.CollectionReference
+  ) {
     const { field, order, limit, filter, cursor } = query;
     let queryRef: firebase.firestore.Query;
 

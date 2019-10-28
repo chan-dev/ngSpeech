@@ -1,0 +1,22 @@
+<ng-container *ngIf="speech">
+  <div class="speech">
+    <div class="speech__header">
+      <div class="align-items-center d-flex justify-content-between">
+        <h2 class="speech-page__title">{{ speech.title }}</h2>
+        <a href="#" mat-flat-button color="accent">Edit</a>
+      </div>
+      <span id="speechTagsLabel" class="cdk-visually-hidden">
+        {{ speech.title }} Tags
+      </span>
+      <mat-chip-list aria-labelledby="speechTagsLabel">
+        <mat-chip *ngFor="let tag of speech.tags | keyvalue">{{
+          tag.value.text
+        }}</mat-chip>
+      </mat-chip-list>
+    </div>
+
+    <div class="speech-page__body">
+      <p>{{ speech.content }}</p>
+    </div>
+  </div>
+</ng-container>
