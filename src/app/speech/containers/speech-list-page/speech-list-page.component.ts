@@ -8,8 +8,8 @@ import {
   FirebaseOrderByDirection,
   PaginationAction,
 } from '@app/models/api';
-import { Observable, merge } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { Observable, merge, of } from 'rxjs';
+import { tap, map, delay, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-speech-list-page',
@@ -46,7 +46,13 @@ export class SpeechListPageComponent implements OnInit, AfterViewInit {
     };
 
     this.dataSource.loadSpeeches(config);
-    this.loading$ = this.dataSource.loading$;
+
+    // Workaround to prevent jumpy behaviour when
+    // navigating thru pagination by immediately hiding
+    // the loader when the requests immediately finishes
+    this.loading$ = this.dataSource.loading$.pipe(
+      switchMap(value => of(value).pipe(delay(100)))
+    );
   }
 
   ngAfterViewInit() {

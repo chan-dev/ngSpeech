@@ -44,7 +44,7 @@
             ></tr>
           </table>
 
-          <div *ngIf="dataSource.loading$ | async" class="spinner-container">
+          <div *ngIf="loading$ | async" class="spinner-container">
             <mat-progress-spinner
               color="accent"
               mode="indeterminate"
