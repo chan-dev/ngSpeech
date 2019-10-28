@@ -18,6 +18,15 @@
               <td mat-cell *matCellDef="let speech">{{ speech.title }}</td>
             </ng-container>
 
+            <ng-container matColumnDef="tags">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Tags</th>
+              <td mat-cell *matCellDef="let speech">
+                <mat-chip-list aria-label={{`${speech.title} tags `}}>
+                  <mat-chip *ngFor="let tag of speech.tags | keyvalue" [selectable]="false">{{ tag.value.text }} </mat-chip>
+                </mat-chip-list>
+              </td>
+            </ng-container>
+
             <ng-container matColumnDef="createdAt">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Created At</th>
               <td mat-cell *matCellDef="let speech">{{ speech.createdAt | date:'mediumDate' }}</td>

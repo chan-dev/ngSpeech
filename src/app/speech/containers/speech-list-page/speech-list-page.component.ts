@@ -20,7 +20,7 @@ export class SpeechListPageComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['title', 'createdAt', 'updatedAt'];
+  displayedColumns: string[] = ['title', 'tags', 'createdAt', 'updatedAt'];
   dataSource = new SpeechesDataSource(this.speechService);
   pageSizeOptions = [5, 10, 15];
   pageSize = this.pageSizeOptions[0];
