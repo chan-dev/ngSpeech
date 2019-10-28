@@ -43,7 +43,12 @@ export class SpeechesDataSource implements DataSource<Speech> {
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe(speeches => {
-        this.speechesSubject.next(speeches);
+        // NOTE: the reason we have to reverse the data before emitting is
+        // for this workaround https://stackoverflow.com/a/54075453/9732932 for
+        // backward pagination in firebase
+        const data =
+          query.order === 'desc' ? this.reverseSpeeches(speeches) : speeches;
+        this.speechesSubject.next(data);
       });
   }
 
@@ -61,5 +66,15 @@ export class SpeechesDataSource implements DataSource<Speech> {
 
     const index = action === PaginationAction.Next ? speeches.length - 1 : 0;
     this.lastActiveCursor = (speeches && speeches[index].doc) || null;
+  }
+
+  reverseSpeeches(speeches) {
+    // NOTE: we used this instead of the native array reverse method
+    // 1. native reverse method, mutates the original array
+    // 2. i'm not quite sure about the support for reverse method
+    return speeches.map((_, index, arr) => {
+      const len = arr.length - 1;
+      return arr[len - index];
+    });
   }
 }
