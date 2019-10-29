@@ -13,6 +13,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule, MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 const modules = [
   MatButtonModule,
@@ -28,6 +33,12 @@ const modules = [
   MatPaginatorModule,
   MatSortModule,
   MatChipsModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatAutocompleteModule,
+  MatOptionModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 ];
 
 @NgModule({

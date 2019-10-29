@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { SpeechContainerPageComponent } from './containers/speech-container-page/speech-container-page.component';
 import { SpeechListPageComponent } from './containers/speech-list-page/speech-list-page.component';
 import { SpeechPageComponent } from './containers/speech-page/speech-page.component';
+import { SpeechCreatePageComponent } from './containers/speech-create-page/speech-create-page.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
         path: '',
         component: SpeechListPageComponent,
         pathMatch: 'full',
+      },
+      {
+        path: 'create',
+        component: SpeechCreatePageComponent,
       },
       {
         path: ':id',

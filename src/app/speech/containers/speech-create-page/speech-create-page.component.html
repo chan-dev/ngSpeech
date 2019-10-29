@@ -1,0 +1,9 @@
+<div class="speech-create-page">
+  <h2 class="speech-create-page__header">Add New Speech</h2>
+  <app-speech-form
+    [editMode]="false"
+    [tags]="tags$ | async"
+    submitLabel="Save"
+    (formSubmit)="saveSpeech($event)"
+  ></app-speech-form>
+</div>

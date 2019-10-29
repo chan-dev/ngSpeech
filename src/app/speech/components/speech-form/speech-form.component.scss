@@ -1,0 +1,43 @@
+.speech-form {
+  label {
+    font-weight: bold;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .mat-form-field {
+    width: 100%;
+    display: block;
+  }
+}
+
+.speech-form__field-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.speech-form__submit-button {
+  order: -1;
+  align-self: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+$error-color: #f44336;
+
+.speech-form__field-error {
+  color: $error-color;
+
+  .ql-toolbar {
+    border-color: $error-color;
+  }
+
+  .ql-container {
+    border-color: $error-color;
+  }
+}
+
+.speech-form__error-msg {
+  font-size: 12px;
+  margin-top: 0.5rem;
+}

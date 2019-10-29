@@ -1,0 +1,132 @@
+<ng-container *ngIf="tags; else loading">
+  <div class="speech-form">
+    <form
+      [formGroup]="speechForm"
+      (ngSubmit)="saveOrUpdate()"
+      class="d-flex flex-column"
+    >
+      <!-- Title -->
+      <div class="speech-form__field-wrapper">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            formControlName="title"
+            placeholder="Title"
+            aria--label="Title"
+          />
+          <mat-error *ngIf="title.invalid"
+            >Please specify a title for your speech</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <!-- Schedule date -->
+      <div class="speech-form__field-wrapper">
+        <mat-form-field>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dueDate"
+            placeholder="Schedule date"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="dueDate.invalid"
+            >Please specify a valid date schedule for your speech.</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <div class="speech-form__field-wrapper">
+        <mat-form-field class="speech-form__tags" floatLabel="auto">
+          <!-- Selecfted tags -->
+          <mat-chip-list #chipList aria-label="Tag selection">
+            <mat-chip
+              *ngFor="let tag of selectedTags"
+              [selectable]="chipsConfig.selectable"
+              [removable]="chipsConfig.removable"
+              (removed)="removeSelectedTag(tag)"
+            >
+              {{ tag }}
+              <mat-icon matChipRemove *ngIf="chipsConfig.removable"
+                >cancel</mat-icon
+              >
+            </mat-chip>
+
+            <!-- Tag filter that filters the autocomplete -->
+            <input
+              placeholder="Tags"
+              #tagInput
+              [formControl]="tagCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="chipsConfig.separatorKeysCodes"
+              [matChipInputAddOnBlur]="chipsConfig.addOnBlur"
+              (matChipInputTokenEnd)="addSelectedTag($event)"
+            />
+          </mat-chip-list>
+
+          <!-- Autocomplete filter tags -->
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selectTag($event)"
+          >
+            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+              {{ tag }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <!-- rich text editor -->
+      <div class="speech-form__field-wrapper">
+        <div
+          [ngClass]="{
+            'speech-form__field-error':
+              content.invalid &&
+              (formSubmitted || content.dirty || content.touched)
+          }"
+        >
+          <quill-editor
+            [styles]="{ height: '10rem' }"
+            [sanitize]="true"
+            formControlName="content"
+          ></quill-editor>
+          <div
+            *ngIf="
+              content.invalid &&
+              (formSubmitted || content.dirty || content.touched)
+            "
+            class="speech-form__error-msg"
+          >
+            Please specify the content of your speech
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="speech-form__submit-button"
+        mat-flat-button
+        color="accent"
+      >
+        {{ this.submitLabel || 'Save' }}
+      </button>
+    </form>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <div class="spinner-container">
+    <mat-progress-spinner
+      color="accent"
+      mode="indeterminate"
+      aria-label="Loading spinner"
+    >
+    </mat-progress-spinner>
+  </div>
+</ng-template>

@@ -7,9 +7,19 @@ import { SpeechContainerPageComponent } from './containers/speech-container-page
 import { SpeechListPageComponent } from './containers/speech-list-page/speech-list-page.component';
 import { SpeechPageComponent } from './containers/speech-page/speech-page.component';
 import { SpeechComponent } from './components/speech/speech.component';
+import { SpeechCreatePageComponent } from './containers/speech-create-page/speech-create-page.component';
+import { SpeechFormComponent } from './components/speech-form/speech-form.component';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-  declarations: [SpeechContainerPageComponent, SpeechListPageComponent, SpeechPageComponent, SpeechComponent],
-  imports: [CommonModule, SharedModule, SpeechRoutingModule],
+  declarations: [
+    SpeechContainerPageComponent,
+    SpeechListPageComponent,
+    SpeechPageComponent,
+    SpeechComponent,
+    SpeechCreatePageComponent,
+    SpeechFormComponent,
+  ],
+  imports: [CommonModule, SharedModule, SpeechRoutingModule, QuillModule],
 })
 export class SpeechModule {}
