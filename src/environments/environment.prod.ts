@@ -9,4 +9,5 @@ export const environment = {
     messagingSenderId: '1055145527461',
     appId: '1:1055145527461:web:719ee951680ede2994e54c',
   },
+  dateFormat: 'YYYY-MM-DD HH:mm:ss',
 };

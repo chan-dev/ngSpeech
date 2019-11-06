@@ -1,18 +1,15 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
-
 export const environment = {
   production: false,
-  firebase : {
-    apiKey: "AIzaSyBTT-9ahZJpZC_owgagilVgVVzOIxaEV_g",
-    authDomain: "ngspeech-a2bb9.firebaseapp.com",
-    databaseURL: "https://ngspeech-a2bb9.firebaseio.com",
-    projectId: "ngspeech-a2bb9",
-    storageBucket: "ngspeech-a2bb9.appspot.com",
-    messagingSenderId: "1055145527461",
-    appId: "1:1055145527461:web:719ee951680ede2994e54c"
-  }
+  firebase: {
+    apiKey: 'AIzaSyBTT-9ahZJpZC_owgagilVgVVzOIxaEV_g',
+    authDomain: 'ngspeech-a2bb9.firebaseapp.com',
+    databaseURL: 'https://ngspeech-a2bb9.firebaseio.com',
+    projectId: 'ngspeech-a2bb9',
+    storageBucket: 'ngspeech-a2bb9.appspot.com',
+    messagingSenderId: '1055145527461',
+    appId: '1:1055145527461:web:719ee951680ede2994e54c',
+  },
+  dateFormat: 'yyyy-MM-dd HH:mm:ss',
 };
 
 /*
