@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { SpeechService } from '@app/speech/services/speech.service';
@@ -8,7 +8,7 @@ import {
   FirebaseOrderByDirection,
   PaginationAction,
 } from '@app/models/api';
-import { Observable, merge, of } from 'rxjs';
+import { Observable, merge, of, Subscription } from 'rxjs';
 import { tap, map, delay, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -16,11 +16,13 @@ import { tap, map, delay, switchMap } from 'rxjs/operators';
   templateUrl: './speech-list-page.component.html',
   styleUrls: ['./speech-list-page.component.scss'],
 })
-export class SpeechListPageComponent implements OnInit, AfterViewInit {
+export class SpeechListPageComponent implements OnInit, OnDestroy, AfterViewInit {
+  private subscription: Subscription;
+
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['title', 'tags', 'createdAt', 'updatedAt'];
+  displayedColumns: string[] = ['title', 'createdAt', 'updatedAt'];
   dataSource = new SpeechesDataSource(this.speechService);
   pageSizeOptions = [5, 10, 15];
   pageSize = this.pageSizeOptions[0];
@@ -61,7 +63,7 @@ export class SpeechListPageComponent implements OnInit, AfterViewInit {
       this.paginator.pageIndex = 0;
     });
 
-    merge(this.paginator.page, this.sort.sortChange)
+    this.subscription = merge(this.paginator.page, this.sort.sortChange)
       .pipe(
         tap(event => {
           // NOTE: about this whole check
@@ -105,5 +107,11 @@ export class SpeechListPageComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe();
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
