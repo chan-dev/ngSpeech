@@ -1,0 +1,11 @@
+<div class="speech-edit-page">
+  <h2 class="speech-create-page__header">Edit Speech</h2>
+  <app-speech-form
+    [editMode]="true"
+    [speech]="speech$ | async"
+    [tags]="tags$ | async"
+    [speechTags]="speechTags$ | async"
+    submitLabel="Update"
+    (formSubmit)="updateSpeech($event)"
+  ></app-speech-form>
+</div>

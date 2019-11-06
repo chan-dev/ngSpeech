@@ -4,6 +4,7 @@ import { SpeechContainerPageComponent } from './containers/speech-container-page
 import { SpeechListPageComponent } from './containers/speech-list-page/speech-list-page.component';
 import { SpeechPageComponent } from './containers/speech-page/speech-page.component';
 import { SpeechCreatePageComponent } from './containers/speech-create-page/speech-create-page.component';
+import { SpeechEditPageComponent } from './containers/speech-edit-page/speech-edit-page.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
       {
         path: 'create',
         component: SpeechCreatePageComponent,
+      },
+      {
+        path: ':id/edit',
+        component: SpeechEditPageComponent
       },
       {
         path: ':id',
