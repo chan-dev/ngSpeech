@@ -15,3 +15,19 @@
   top: 0;
   z-index: 1;
 }
+
+.header__brand {
+  a {
+    color: #fff;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.mat-menu-content {
+  button.mat-menu-item:focus {
+    outline: 0;
+  }
+}

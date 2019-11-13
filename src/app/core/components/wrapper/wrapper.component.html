@@ -1,25 +1,33 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button (click)="nav.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <h1 class="example-app-name">Responsive App</h1>
+  <header class="header d-flex justify-content-between w-100">
+    <h1 class="header__brand">
+      <a [routerLink]="['/speeches']">ngSpeech</a>
+    </h1>
+    <div class="header__actions d-flex">
+      <a
+        [routerLink]="['/speeches/create']"
+        class="mr-3 text-decoration-none"
+        mat-flat-button
+      >
+        <mat-icon aria-hidden="true">add</mat-icon>
+        New
+      </a>
+      <div class="username" *ngIf="user$ | async as user">
+        <!-- Hi, {{ user.displayName }} -->
+        <button type="button" mat-button [matMenuTriggerFor]="headerActions">
+          {{ user.displayName }}
+        </button>
+        <mat-menu #headerActions="matMenu" xPosition="before">
+          <a
+            [routerLink]="['/speeches']"
+            class="text-decoration-none"
+            mat-menu-item
+            >Your Speeches</a
+          >
+          <button type="button" mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
+      </div>
+    </div>
+  </header>
 </mat-toolbar>
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #nav
-    class="sidenav"
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [opened]="(isHandset$ | async) === false"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    >
-
-    <mat-nav-list>
-      <a mat-list-item href="#">Link 1</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<router-outlet></router-outlet>
