@@ -1,1 +1,56 @@
-<p>login works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="login-form">
+        <div class="my-3">
+          <app-alert
+            className="danger"
+            [showAlert]="showErrorMessage"
+            [dismissible]="true"
+            (closeAlert)="closeAlert()">
+            <strong>Authentication error: </strong>Incorrect email/password
+          </app-alert>
+        </div>
+
+        <form [formGroup]="loginForm" class="d-flex flex-column mt-5">
+
+          <div class="mb-4">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                formControlName="email"
+                placeholder="Email"
+                aria-label="email"
+              />
+              <mat-error *ngIf="email.invalid">Email is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="mb-4">
+            <mat-form-field>
+              <input
+                matInput
+                type="password"
+                formControlName="password"
+                placeholder="Password"
+                aria-label="password"
+              />
+              <mat-error *ngIf="password.invalid">Password is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <button
+            type="submit"
+            mat-flat-button
+            color="accent"
+            [disabled]="loginForm.invalid"
+            (click)="login()"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

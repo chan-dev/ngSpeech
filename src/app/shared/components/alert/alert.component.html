@@ -1,0 +1,15 @@
+<ng-container *ngIf="showAlert">
+  <div class="mb-4">
+    <div class="fade show" role="alert" [ngClass]="classes">
+      <button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-label="Close"
+      >
+        <span aria-hidden="true" (click)="close()" *ngIf="dismissible">×</span>
+      </button>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-container>

@@ -6,6 +6,7 @@ import { environment } from '@env/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { WrapperComponent } from './components/wrapper/wrapper.component';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
     RouterModule, // for router-outlet directive
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    AngularFireAuthModule,
     AngularMaterialModule,
   ],
   declarations: [WrapperComponent],
