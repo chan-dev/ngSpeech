@@ -4,9 +4,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from './angular-material.module';
 import { RelativeDatePipe } from './pipes/relative-date.pipe';
 import { AlertComponent } from './components/alert/alert.component';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
 
 @NgModule({
-  declarations: [RelativeDatePipe, AlertComponent],
+  declarations: [RelativeDatePipe, AlertComponent, ConfirmModalComponent],
   imports: [CommonModule, ReactiveFormsModule, AngularMaterialModule],
   exports: [
     CommonModule,
@@ -14,6 +15,8 @@ import { AlertComponent } from './components/alert/alert.component';
     AngularMaterialModule,
     RelativeDatePipe,
     AlertComponent,
+    ConfirmModalComponent,
   ],
+  entryComponents: [ConfirmModalComponent],
 })
 export class SharedModule {}
