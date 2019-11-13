@@ -1,5 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~bootstrap/scss/bootstrap';
+// @import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/utilities';
+@import '~bootstrap/scss/bootstrap-reboot';
+@import '~bootstrap/scss/bootstrap-grid';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/close';
+
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import '~quill/dist/quill.core.css';
 @import '~quill/dist/quill.snow.css';
