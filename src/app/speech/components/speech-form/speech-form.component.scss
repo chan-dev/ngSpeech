@@ -1,3 +1,5 @@
+$error-color: #f44336;
+
 .speech-form {
   label {
     font-weight: bold;
@@ -11,19 +13,13 @@
     width: 100%;
     display: block;
   }
-}
 
-.speech-form__field-wrapper {
-  margin-bottom: 1.5rem;
+  button[type="submit"] {
+    order: -1;
+    align-self: flex-end;
+    margin-bottom: 1.5rem;
+  }
 }
-
-.speech-form__submit-button {
-  order: -1;
-  align-self: flex-end;
-  margin-bottom: 1.5rem;
-}
-
-$error-color: #f44336;
 
 .speech-form__field-error {
   color: $error-color;

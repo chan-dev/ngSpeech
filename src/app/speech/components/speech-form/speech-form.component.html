@@ -6,14 +6,14 @@
       class="d-flex flex-column"
     >
       <!-- Title -->
-      <div class="speech-form__field-wrapper">
+      <div class="mb-4">
         <mat-form-field>
           <input
             matInput
             type="text"
             formControlName="title"
             placeholder="Title"
-            aria--label="Title"
+            aria-label="Title"
           />
           <mat-error *ngIf="title.invalid"
             >Please specify a title for your speech</mat-error
@@ -22,13 +22,14 @@
       </div>
 
       <!-- Schedule date -->
-      <div class="speech-form__field-wrapper">
+      <div class="mb-4">
         <mat-form-field>
           <input
             matInput
             [matDatepicker]="picker"
             formControlName="dueDate"
             placeholder="Schedule date"
+            aria-label="Due date"
           />
           <mat-datepicker-toggle
             matSuffix
@@ -41,7 +42,7 @@
         </mat-form-field>
       </div>
 
-      <div class="speech-form__field-wrapper">
+      <div class="mb-4">
         <mat-form-field class="speech-form__tags" floatLabel="auto">
           <!-- Selecfted tags -->
           <mat-chip-list #chipList aria-label="Tag selection">
@@ -83,7 +84,7 @@
       </div>
 
       <!-- rich text editor -->
-      <div class="speech-form__field-wrapper">
+      <div class="mb-4">
         <div
           [ngClass]="{
             'speech-form__field-error':
@@ -110,7 +111,6 @@
 
       <button
         type="submit"
-        class="speech-form__submit-button"
         mat-flat-button
         color="accent"
       >
