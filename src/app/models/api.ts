@@ -19,10 +19,8 @@ export interface Speech {
   title: string;
   createdAt: string;
   updatedAt: string;
-  // NOTE: Since we're using NoSQL in Firebase
-  // we denormalize the result for faster read queries
-  // and only require certain columns
-  author: Partial<User>;
+  dueDate: string;
+  authorId: string;
 }
 
 // export type SpeechTags = { [tagId: string]: boolean } & { id: string };
@@ -36,8 +34,8 @@ export type FirebaseOrderByDirection = firebase.firestore.OrderByDirection;
 
 export interface PaginationQueryConfig {
   field: string; // field to orderBy
-  limit: number; // limit per query
   order: FirebaseOrderByDirection; // sort order
+  limit?: number; // limit per query
   filter?: string; // used for searching
   path?: string; //  path to collection
   cursor?: FirebaseQueryDocSnapshot; // used for firestore pagination
