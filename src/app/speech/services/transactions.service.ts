@@ -11,7 +11,7 @@ export class TransactionsService {
 
   // TODO: we must also include in transaction the speech
   createOrUpdateSpeechAndTags(
-    speech: Speech,
+    speech: Partial<Speech>,
     selectedTags: string[],
     allTags: Tag[],
     speechTags?: SpeechTags, // Note: we can replace this with array of strings
@@ -43,7 +43,7 @@ export class TransactionsService {
 
   createOrUpdateSpeech(
     transaction: firebase.firestore.Transaction,
-    speech: Speech,
+    speech: Partial<Speech>,
     speechRefId: string
   ) {
     const speechCollection = 'speeches';

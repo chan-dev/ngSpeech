@@ -7,5 +7,6 @@
     [speechTags]="speechTags$ | async"
     submitLabel="Update"
     (formSubmit)="updateSpeech($event)"
+    (formChanges)="listenToChanges($event)"
   ></app-speech-form>
 </div>

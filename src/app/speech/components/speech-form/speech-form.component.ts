@@ -22,7 +22,7 @@ import {
 } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, tap } from 'rxjs/operators';
 import { Tag, Speech } from '@app/models/api';
 
 @Component({
@@ -38,13 +38,13 @@ export class SpeechFormComponent implements OnChanges {
   @Input() tags: Tag[];
   @Input() speechTags: Tag[];
   @Output() formSubmit: EventEmitter<any> = new EventEmitter();
+  @Output() formChanges: EventEmitter<any> = new EventEmitter();
   @ViewChild('tagInput', { static: false }) tagInput: ElementRef<
     HTMLInputElement
   >;
   @ViewChild('auto', { static: false }) matAutocomplete: MatAutocomplete;
   // NOTE: we don't need to store the value of this one, it's only
   // used for filtering
-  fruitCtrl = new FormControl();
   tagCtrl = new FormControl();
   chipsConfig = {
     visible: true,
@@ -53,13 +53,10 @@ export class SpeechFormComponent implements OnChanges {
     addOnBlur: true,
     separatorKeysCodes: [ENTER, COMMA],
   };
-  filteredFruits: Observable<string[]>;
   filteredTags: Observable<string[]>;
   // NOTE: value of chiplist
-  selectedFruits: string[] = ['Lemon'];
   selectedTags: string[] = [];
   // fetched from server
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
   allTags: string[];
   speechForm: FormGroup;
   formSubmitted = false;
@@ -71,6 +68,9 @@ export class SpeechFormComponent implements OnChanges {
       content: ['', Validators.required],
       tags: [''], // will be updated on submit
     });
+
+    this.speechForm.valueChanges
+      .subscribe(value => this.formChanges.emit(this.speechForm));
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,6 +90,7 @@ export class SpeechFormComponent implements OnChanges {
       // Add our tag
       if ((value || '').trim()) {
         this.selectedTags.push(value.trim());
+        this.setTagsFormField(this.selectedTags);
       }
 
       // Reset the input value
@@ -106,11 +107,13 @@ export class SpeechFormComponent implements OnChanges {
 
     if (index >= 0) {
       this.selectedTags.splice(index, 1);
+      this.setTagsFormField(this.selectedTags);
     }
   }
 
   selectTag(event: MatAutocompleteSelectedEvent) {
     this.selectedTags.push(event.option.viewValue);
+    this.setTagsFormField(this.selectedTags);
     this.tagInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
   }
@@ -118,12 +121,18 @@ export class SpeechFormComponent implements OnChanges {
   saveOrUpdate() {
     const uniqueTags = [...new Set(this.selectedTags)];
     this.formSubmitted = true;
-
-    this.speechForm.get('tags').setValue(uniqueTags);
+    this.setTagsFormField(uniqueTags);
 
     if (this.speechForm.valid) {
       this.formSubmit.emit(this.speechForm.value);
     }
+  }
+
+  private setTagsFormField(tags) {
+    const tagControl = this.speechForm.get('tags');
+
+    tagControl.setValue(tags);
+    tagControl.markAsDirty();
   }
 
   private updateSpeechOnChanges(speechChanges) {
@@ -132,11 +141,11 @@ export class SpeechFormComponent implements OnChanges {
       speechChanges.currentValue !== speechChanges.previousValue
     ) {
       if (this.speech) {
-        const { title, content, createdAt } = this.speech;
+        const { title, content, dueDate } = this.speech;
         this.speechForm.patchValue({
           title,
           content,
-          dueDate: new Date(createdAt),
+          dueDate: new Date(dueDate)
         });
       }
     }
@@ -164,6 +173,9 @@ export class SpeechFormComponent implements OnChanges {
     if (this.tags && !this.filteredTags) {
       this.filteredTags = this.tagCtrl.valueChanges.pipe(
         startWith(null),
+        // We set the tags form field dirty status here since
+        // We only update tags form field value on submit
+        // tap(value =>  this.speechForm.get('tags').markAsDirty()),
         map((tag: string | null) =>
           tag ? this._filter(tag) : this.allTags.slice()
         )

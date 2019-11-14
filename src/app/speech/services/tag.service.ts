@@ -58,7 +58,7 @@ export class TagService {
   getSpeechTags(speechId: string): Observable<Tag[]> {
     const speechIds$ = this.getSpeechTagIds(speechId);
     return speechIds$.pipe(
-      map(speechIds => Object.keys(speechIds)),
+      map(speechIds => Object.keys(speechIds || {})),
       mergeMap(speechIds => {
         return from(speechIds).pipe(
           mergeMap(id => this.getTag(id)),
