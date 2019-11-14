@@ -20,6 +20,7 @@ import { MatOptionModule, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const modules = [
   MatButtonModule,
@@ -43,6 +44,7 @@ const modules = [
   MatNativeDateModule,
   MatDialogModule,
   MatMenuModule,
+  MatTooltipModule,
 ];
 
 @NgModule({

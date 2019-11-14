@@ -41,7 +41,7 @@ export class SpeechService {
         ),
         tap(data => {
           const titles = data.map(v => v.title);
-          console.log(titles);
+          // console.log(titles);
         })
       );
   }
@@ -61,6 +61,12 @@ export class SpeechService {
       );
   }
 
+  deleteSpeech(id: string) {
+    return this.afs
+    .doc<SpeechAPIResult>(`speeches/${id}`)
+    .delete();
+  }
+
   private buildQuery(
     query: PaginationQueryConfig,
     ref: firebase.firestore.CollectionReference
@@ -68,9 +74,12 @@ export class SpeechService {
     const { field, order, limit, filter, cursor } = query;
     let queryRef: firebase.firestore.Query;
 
-    queryRef = ref.orderBy(field, order);
+    // queryRef = ref.orderBy(field, order);
+    // TODO: search why multiple orderBy doesn't work
+    queryRef = ref.orderBy(field, order).orderBy('createdAt', 'asc');
 
     if (cursor) {
+      // TODO: use startAfter with compound queries
       queryRef = queryRef.startAfter(cursor || null);
     }
 

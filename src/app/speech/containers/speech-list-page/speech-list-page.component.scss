@@ -12,3 +12,16 @@
   min-height: 25px;
   font-weight: normal;
 }
+
+.speech-list-page__filter {
+
+  .mat-form-field-infix {
+    border-top: 0 !important;
+  }
+
+  .mat-form-field-wrapper {
+    margin: 0 0.5rem 0 0 !important;
+    padding: 0 !important;
+  }
+
+}

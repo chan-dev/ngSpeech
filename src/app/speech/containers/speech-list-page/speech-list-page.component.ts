@@ -1,43 +1,70 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit,
+  ViewEncapsulation,
+  ElementRef,
+} from '@angular/core';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { SpeechService } from '@app/speech/services/speech.service';
-import { SpeechesDataSource } from '@app/speech/services/speech.datasource';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable, merge, of, fromEvent, Subject } from 'rxjs';
+import {
+  tap,
+  map,
+  delay,
+  switchMap,
+  debounceTime,
+  distinctUntilChanged,
+  startWith,
+  takeUntil,
+} from 'rxjs/operators';
 import {
   PaginationQueryConfig,
   FirebaseOrderByDirection,
   PaginationAction,
 } from '@app/models/api';
-import { Observable, merge, of, Subscription } from 'rxjs';
-import { tap, map, delay, switchMap } from 'rxjs/operators';
+import { SpeechService } from '@app/speech/services/speech.service';
+import { SpeechesDataSource } from '@app/speech/services/speech.datasource';
+import { ConfirmModalComponent } from '@app/shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-speech-list-page',
   templateUrl: './speech-list-page.component.html',
   styleUrls: ['./speech-list-page.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class SpeechListPageComponent implements OnInit, OnDestroy, AfterViewInit {
-  private subscription: Subscription;
+export class SpeechListPageComponent
+  implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild('filter', { static: true }) filter: ElementRef;
 
-  displayedColumns: string[] = ['title', 'createdAt', 'updatedAt'];
+  displayedColumns: string[] = ['title', 'dueDate', 'createdAt', 'updatedAt', 'actions'];
   dataSource = new SpeechesDataSource(this.speechService);
   pageSizeOptions = [5, 10, 15];
   pageSize = this.pageSizeOptions[0];
   sortOrder: SortDirection = 'asc';
   paginationAction: PaginationAction;
   allSpeechesCount$: Observable<number>;
+  allSpeechesCount: number;
   loading$: Observable<boolean>;
   lastPageVisitedIndex = 0; // first page
+  unsubscribe$ = new Subject();
 
-  constructor(private speechService: SpeechService) {}
+  constructor(
+    public dialog: MatDialog,
+    private speechService: SpeechService
+  ) {}
 
   ngOnInit() {
-    this.allSpeechesCount$ = this.speechService
-      .getSpeeches()
-      .pipe(map(result => result.length));
+    // TODO: call this again after filter
+    // this.allSpeechesCount$ = this.speechService
+    //   .getSpeeches()
+    //   .pipe(map(result => result.length));
 
     const config: PaginationQueryConfig = {
       field: 'title',
@@ -63,7 +90,40 @@ export class SpeechListPageComponent implements OnInit, OnDestroy, AfterViewInit
       this.paginator.pageIndex = 0;
     });
 
-    this.subscription = merge(this.paginator.page, this.sort.sortChange)
+    // TODO: unsubscribe
+    // complete on destroy?
+    const filter$ = fromEvent(this.filter.nativeElement, 'keyup').pipe(
+      tap(() => console.log('fromEvent listener')),
+      map(event => (event as any).target.value),
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.unsubscribe$)
+    );
+
+    this.allSpeechesCount$ = filter$.pipe(
+      tap(value => {
+        const config: PaginationQueryConfig = {
+          field: 'title',
+          limit: this.pageSize,
+          order: this.sortOrder as FirebaseOrderByDirection,
+          cursor: null,
+          filter: value,
+        };
+        this.paginator.pageIndex = 0;
+        this.dataSource.loadSpeeches(config);
+      }),
+      switchMap(value => {
+        return this.speechService.getSpeeches({
+          field: 'title',
+          filter: value,
+          order: this.sortOrder as FirebaseOrderByDirection,
+        });
+      }),
+      map(result => result.length)
+    );
+
+    merge(this.paginator.page, this.sort.sortChange)
       .pipe(
         tap(event => {
           // NOTE: about this whole check
@@ -74,7 +134,7 @@ export class SpeechListPageComponent implements OnInit, OnDestroy, AfterViewInit
           if (event.hasOwnProperty('pageIndex')) {
             // this.paginationAction: PaginationAction;
             const pageEvent = event as PageEvent;
-            const { pageIndex, previousPageIndex } = pageEvent;
+            const { pageIndex } = pageEvent;
             if (pageIndex > this.lastPageVisitedIndex) {
               this.paginationAction = PaginationAction.Next;
             } else {
@@ -104,14 +164,36 @@ export class SpeechListPageComponent implements OnInit, OnDestroy, AfterViewInit
           });
 
           this.dataSource.loadSpeeches(config);
-        })
+        }),
+        takeUntil(this.unsubscribe$)
       )
       .subscribe();
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    // if (this.subscription) {
+    //   this.subscription.unsubscribe();
+    // }
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  deleteSpeech(id: string) {
+    const dialogRef = this.openDialog();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.speechService.deleteSpeech(id);
+      }
+    });
+  }
+
+  openDialog() {
+    return this.dialog.open(ConfirmModalComponent, {
+      data: {
+        header: 'Delete Speech',
+        content: 'Do you want to delete this speech?',
+      },
+      width: '18rem',
+    });
   }
 }

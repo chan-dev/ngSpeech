@@ -1,6 +1,6 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, finalize, take } from 'rxjs/operators';
+import { catchError, finalize, take, tap } from 'rxjs/operators';
 import {
   Speech,
   PaginationQueryConfig,
@@ -38,9 +38,9 @@ export class SpeechesDataSource implements DataSource<Speech> {
         // required to complete the angularfire's snapshotChanges() observable w/c
         // doesn't use HttpClient. Unlike snapshotChanges, HttpClient requests
         // are only one-off requests then completes
-        take(1),
+        // take(1),
         catchError(() => of([])),
-        finalize(() => this.loadingSubject.next(false))
+        tap(() => this.loadingSubject.next(false))
       )
       .subscribe(speeches => {
         // NOTE: the reason we have to reverse the data before emitting is
